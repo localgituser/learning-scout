@@ -89,7 +89,7 @@ async def send_digest(digest: Digest, config: AppConfig) -> None:
 
 
 async def _handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    allowed_chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
+    allowed_chat_id = os.environ["TELEGRAM_CHAT_ID"]
     if not is_authorised(update, allowed_chat_id):
         return  # silent ignore — no info to unknown senders
 
@@ -140,7 +140,7 @@ async def _handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
 
 async def _handle_saved(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    if not is_authorised(update, os.environ.get("TELEGRAM_CHAT_ID", "")):
+    if not is_authorised(update, os.environ["TELEGRAM_CHAT_ID"]):
         return
     seen, _ = load_seen()
     text = format_saved_list(list(seen.values()))
@@ -151,7 +151,7 @@ _MAX_KEYWORD_LEN = 100
 
 
 async def _handle_block(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    if not is_authorised(update, os.environ.get("TELEGRAM_CHAT_ID", "")):
+    if not is_authorised(update, os.environ["TELEGRAM_CHAT_ID"]):
         return
     keyword = " ".join(context.args or []).strip()[:_MAX_KEYWORD_LEN]
     if not keyword:
@@ -166,7 +166,7 @@ async def _handle_block(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
 
 async def _handle_reset(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    if not is_authorised(update, os.environ.get("TELEGRAM_CHAT_ID", "")):
+    if not is_authorised(update, os.environ["TELEGRAM_CHAT_ID"]):
         return
     save_seen({}, [])
     gh = _github_config()
