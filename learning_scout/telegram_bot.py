@@ -103,6 +103,17 @@ async def _handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     seen, blocked = load_seen()
     # Find matching item by exact-length prefix — require unique match to prevent mis-targeting
     candidates = [item for h, item in seen.items() if h.startswith(parsed.item_hash)]
+    if not candidates:
+        # seen.json may be stale (digest ran after bot last started) — re-hydrate from GitHub
+        try:
+            gh = _github_config()
+            raw = await fetch_seen_json(gh)
+            if raw is not None:
+                SEEN_PATH.write_text(raw)
+                seen, blocked = load_seen()
+                candidates = [item for h, item in seen.items() if h.startswith(parsed.item_hash)]
+        except Exception:
+            pass
     if len(candidates) != 1:
         await query.edit_message_text("⚠️ Item not found — it may have expired.")
         return
