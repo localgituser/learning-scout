@@ -20,8 +20,8 @@ from learning_scout.formatter import (
     format_saved_list,
     format_blocked_list,
 )
-from learning_scout.github_writer import GitHubWriterConfig, commit_seen_json
-from learning_scout.memory import load_seen, save_seen, mark_seen, add_blocked_keyword
+from learning_scout.github_writer import GitHubWriterConfig, commit_seen_json, fetch_seen_json
+from learning_scout.memory import load_seen, save_seen, mark_seen, add_blocked_keyword, SEEN_PATH
 from learning_scout.models import AppConfig, Digest
 
 
@@ -159,8 +159,26 @@ async def _handle_reset(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     await update.message.reply_text("♻️ History cleared. Next digest starts fresh.")
 
 
+async def _hydrate_seen(app: Application) -> None:
+    """On startup, pull seen.json from GitHub so state survives Railway restarts."""
+    try:
+        gh = _github_config()
+    except KeyError:
+        return  # GITHUB_TOKEN / GITHUB_REPO not set — skip
+    try:
+        raw = await fetch_seen_json(gh)
+    except Exception as exc:
+        print(f"[startup] Could not fetch seen.json from GitHub: {exc}", flush=True)
+        return
+    if raw is None:
+        print("[startup] seen.json not found in GitHub — starting fresh.", flush=True)
+        return
+    SEEN_PATH.write_text(raw)
+    print("[startup] Hydrated seen.json from GitHub.", flush=True)
+
+
 def build_application(bot_token: str) -> Application:
-    app = Application.builder().token(bot_token).build()
+    app = Application.builder().token(bot_token).post_init(_hydrate_seen).build()
     app.add_handler(CallbackQueryHandler(_handle_callback))
     app.add_handler(CommandHandler("saved", _handle_saved))
     app.add_handler(CommandHandler("block", _handle_block))

@@ -6,7 +6,9 @@ build/
 .venv/
 venv/
 .env
+.claude/PROJECT.MD
 config.yaml
+seen.json
 .coverage
 htmlcov/
 .pytest_cache/

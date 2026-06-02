@@ -19,7 +19,11 @@ async def _run(dry_run: bool = False) -> None:
     config = load_config(Path("config.yaml"))
 
     seen, blocked = load_seen()
-    client = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    client = AsyncAnthropic(
+        api_key=os.environ["ANTHROPIC_API_KEY"],
+        default_headers={"anthropic-beta": "web-search-2025-03-05"},
+        timeout=60.0,
+    )
 
     raw_items = await run_search(config, client=client)
     unseen = filter_unseen(raw_items, seen)

@@ -7,7 +7,7 @@ import hashlib
 
 CareerStage = Literal["early", "mid", "mid-senior", "senior", "exec"]
 ItemStatus = Literal["saved", "skipped", "blocked"]
-ItemCategory = Literal["in_person_events", "online_courses", "cohort_programs", "books_or_resources", "wildcard"]
+ItemCategory = Literal["in_person_events", "online_events", "meetups", "online_courses", "cohort_programs", "books_or_resources", "wildcard"]
 
 
 class UserProfile(BaseModel):
@@ -26,9 +26,11 @@ class SearchConfig(BaseModel):
 
 
 class CategorySlots(BaseModel):
-    in_person_events: int = 2
+    in_person_events: int = 1
+    online_events: int = 2
+    meetups: int = 1
     online_courses: int = 2
-    cohort_programs: int = 2
+    cohort_programs: int = 1
     books_or_resources: int = 1
     wildcard: int = 1
 
