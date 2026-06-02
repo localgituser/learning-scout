@@ -6,7 +6,9 @@ from datetime import date
 from pathlib import Path
 from learning_scout.models import LearningItem, SeenItem, ItemStatus
 
-SEEN_PATH = Path("seen.json")
+# SEEN_FILE env var allows each deployment context (Actions, Railway, local)
+# to set an explicit absolute path; otherwise fall back to cwd/seen.json.
+SEEN_PATH = Path(os.environ.get("SEEN_FILE", "seen.json"))
 
 
 def compute_hash(title: str, url: str) -> str:
