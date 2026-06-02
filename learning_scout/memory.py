@@ -1,6 +1,8 @@
 from __future__ import annotations
 import hashlib
 import json
+import os
+import tempfile
 from datetime import date
 from pathlib import Path
 from learning_scout.models import LearningItem, SeenItem, ItemStatus
@@ -35,10 +37,16 @@ def save_seen(seen: dict[str, SeenItem], blocked: list[str], path: Path = SEEN_P
         "items": [item.model_dump(mode="json") for item in seen.values()],
         "blocked_keywords": blocked,
     }
-    # Atomic write: tmp file then rename to avoid partial writes
-    tmp = path.with_suffix(".tmp")
-    tmp.write_text(json.dumps(payload, indent=2, default=str))
-    tmp.replace(path)
+    # Atomic write: unique tmp in same directory, then rename to avoid partial writes
+    fd, tmp_str = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
+    try:
+        os.write(fd, json.dumps(payload, indent=2, default=str).encode())
+        os.close(fd)
+        Path(tmp_str).replace(path)
+    except Exception:
+        os.close(fd)
+        Path(tmp_str).unlink(missing_ok=True)
+        raise
 
 
 def is_seen(item_hash: str, seen: dict[str, SeenItem]) -> bool:
