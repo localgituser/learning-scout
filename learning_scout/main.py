@@ -19,6 +19,7 @@ from learning_scout.telegram_bot import send_digest
 async def _run(dry_run: bool = False) -> None:
     config = load_config(Path("config.yaml"))
 
+    today = date.today()
     seen, blocked = load_seen()
     client = AsyncAnthropic(
         api_key=os.environ["ANTHROPIC_API_KEY"],
@@ -26,11 +27,11 @@ async def _run(dry_run: bool = False) -> None:
         timeout=60.0,
     )
 
-    raw_items = await run_search(config, client=client)
+    raw_items = await run_search(config, client=client, as_of=today)
     unseen = filter_unseen(raw_items, seen)
     unblocked = filter_blocked(unseen, blocked)
 
-    digest = build_digest(unblocked, config)
+    digest = build_digest(unblocked, config, as_of=today)
 
     if not digest.items:
         print("No new items to send this week.")
@@ -48,7 +49,6 @@ async def _run(dry_run: bool = False) -> None:
         print(f"Failed to send digest: {exc}", file=sys.stderr)
         sys.exit(1)
 
-    today = date.today()
     for item in digest.items:
         seen = mark_seen(seen, item, "skipped", today)  # default to skipped; bot upgrades to saved
     save_seen(seen, blocked)

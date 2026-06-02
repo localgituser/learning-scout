@@ -25,10 +25,10 @@ def filter_by_min_score(items: list[LearningItem], min_score: float) -> list[Lea
     return [i for i in items if i.final_score >= min_score]
 
 
-def apply_scores(items: list[LearningItem], config: AppConfig) -> list[LearningItem]:
+def apply_scores(items: list[LearningItem], config: AppConfig, as_of: date | None = None) -> list[LearningItem]:
     scored = []
     for item in items:
-        mod = compute_timeliness_modifier(item)
+        mod = compute_timeliness_modifier(item, as_of=as_of)
         scored.append(item.model_copy(update={
             "timeliness_modifier": mod,
             "final_score": item.raw_score + mod,
@@ -65,9 +65,10 @@ def _filter_past_events(items: list[LearningItem], as_of: date | None = None) ->
     ]
 
 
-def build_digest(items: list[LearningItem], config: AppConfig) -> Digest:
-    filtered = _filter_past_events(_filter_budget(items, config.budget_aud))
-    scored = apply_scores(filtered, config)
+def build_digest(items: list[LearningItem], config: AppConfig, as_of: date | None = None) -> Digest:
+    today = as_of or date.today()
+    filtered = _filter_past_events(_filter_budget(items, config.budget_aud), as_of=today)
+    scored = apply_scores(filtered, config, as_of=today)
     # filter after scoring so timeliness modifiers are considered
     scored = filter_by_min_score(scored, config.search.min_relevance_score)
 

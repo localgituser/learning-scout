@@ -67,9 +67,9 @@ Return an empty array [] if nothing relevant is found. Do not include markdown c
 """
 
 
-def _build_user_prompt(topic: str, config: AppConfig) -> str:
-    from datetime import date
-    today = date.today().isoformat()
+def _build_user_prompt(topic: str, config: AppConfig, as_of: "date | None" = None) -> str:
+    from datetime import date as _date
+    today = (as_of or _date.today()).isoformat()
     p = config.profile
     return (
         f"Today's date: {today}\n"
@@ -146,13 +146,14 @@ async def search_topic(
     topic: str,
     config: AppConfig,
     client: AsyncAnthropic,
+    as_of: "date | None" = None,
 ) -> list[LearningItem]:
     print(f"  → searching: {topic}", flush=True)
     response = await client.messages.create(
         model=config.search.model,
         max_tokens=2048,
         system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": _build_user_prompt(topic, config)}],
+        messages=[{"role": "user", "content": _build_user_prompt(topic, config, as_of=as_of)}],
         tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 3}],
     )
 
@@ -166,6 +167,7 @@ async def search_topic(
 async def run_search(
     config: AppConfig,
     client: AsyncAnthropic | None = None,
+    as_of: "date | None" = None,
 ) -> list[LearningItem]:
     if client is None:
         client = AsyncAnthropic()
@@ -177,7 +179,7 @@ async def run_search(
 
     async def _bounded(topic: str) -> list[LearningItem]:
         async with sem:
-            return await search_topic(topic, config, client)
+            return await search_topic(topic, config, client, as_of=as_of)
 
     tasks = [_bounded(t) for t in topics]
     results = await asyncio.gather(*tasks, return_exceptions=True)
