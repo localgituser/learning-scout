@@ -32,6 +32,7 @@ class TelegramCallbackData:
 
 
 _ALLOWED_ACTIONS = {"save", "skip"}
+_ACTION_TO_STATUS = {"save": "saved", "skip": "skipped"}
 _HASH_LEN = 16  # first 16 hex chars; fits "save:aaabbbcccdddee" in 64 bytes
 
 
@@ -118,7 +119,6 @@ async def _handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         await query.edit_message_text("⚠️ Item not found — it may have expired.")
         return
     matched = candidates[0]
-    _ACTION_TO_STATUS = {"save": "saved", "skip": "skipped"}
     new_status = _ACTION_TO_STATUS[parsed.action]
     seen[matched.id] = matched.model_copy(update={"status": new_status})
     save_seen(seen, blocked)
