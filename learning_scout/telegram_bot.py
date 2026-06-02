@@ -112,8 +112,8 @@ async def _handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 SEEN_PATH.write_text(raw)
                 seen, blocked = load_seen()
                 candidates = [item for h, item in seen.items() if h.startswith(parsed.item_hash)]
-        except Exception:
-            pass
+        except Exception as exc:
+            print(f"[callback] re-hydrate from GitHub failed: {exc}", flush=True)
     if len(candidates) != 1:
         await query.edit_message_text("⚠️ Item not found — it may have expired.")
         return
