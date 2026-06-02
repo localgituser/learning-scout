@@ -222,13 +222,14 @@ digest:
   # showing 8 Reforge courses. Set to false to rank purely by score.
 
   categories:
-    in_person_events: 2    # conferences, summits, workshops
+    in_person_events: 1    # physical conferences, summits, workshops
+    online_events: 2       # virtual conferences, vendor summits (Snowflake, dbt, etc.)
+    meetups: 1             # Meetup.com groups, user groups, community nights
     online_courses: 2      # self-paced courses, video series
-    cohort_programs: 2     # Reforge, On Deck, structured cohorts
+    cohort_programs: 1     # Reforge, On Deck, structured cohorts
     books_or_resources: 1  # books, guides, frameworks
-    wildcard: 1            # anything that scored highly but doesn't fit above
-  # These are slot limits, not guarantees. If Claude finds no books this week,
-  # that slot stays empty — it won't be filled with a 9th conference.
+    wildcard: 1            # anything high-scoring that doesn't fit above
+  # These are slot limits, not guarantees. Empty slots stay empty.
 
 
 # ── Delivery ─────────────────────────────────────────────────────────────────

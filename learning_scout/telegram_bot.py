@@ -93,10 +93,10 @@ async def _handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         return  # silent ignore — no info to unknown senders
 
     query = update.callback_query
-    await query.answer()
 
     parsed = parse_callback_data(query.data or "")
     if parsed is None:
+        await query.answer()
         return
 
     seen, blocked = load_seen()
@@ -115,8 +115,13 @@ async def _handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     await commit_seen_json(seen, blocked, gh)
 
     label = "💾 Saved!" if parsed.action == "save" else "⏭ Skipped"
-    await query.edit_message_reply_markup(reply_markup=None)
-    await query.answer(label, show_alert=False)
+    original_html = query.message.text_html or ""
+    await query.edit_message_text(
+        text=f"{original_html}\n\n<b>{label}</b>",
+        parse_mode=ParseMode.HTML,
+        disable_web_page_preview=True,
+    )
+    await query.answer(label)
 
 
 async def _handle_saved(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

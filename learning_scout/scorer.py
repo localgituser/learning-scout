@@ -54,8 +54,16 @@ def enforce_slots(items: list[LearningItem], digest_config: DigestConfig) -> lis
     return result
 
 
+def _filter_past_events(items: list[LearningItem], as_of: date | None = None) -> list[LearningItem]:
+    today = as_of or date.today()
+    return [
+        i for i in items
+        if i.event_date is None or i.event_date >= today
+    ]
+
+
 def build_digest(items: list[LearningItem], config: AppConfig) -> Digest:
-    filtered = _filter_budget(items, config.budget_aud)
+    filtered = _filter_past_events(_filter_budget(items, config.budget_aud))
     scored = apply_scores(filtered, config)
     # filter after scoring so timeliness modifiers are considered
     scored = filter_by_min_score(scored, config.search.min_relevance_score)
