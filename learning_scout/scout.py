@@ -35,6 +35,12 @@ IMPORTANT — recency rules for articles, blog posts, and podcast episodes:
 - For YouTube videos, prefer content published within the last 7 days; only include older videos if they are landmark/seminal content with no recent equivalent.
 - Newsletters, courses, books, communities, and events are not subject to the 7-day rule — include them based on relevance.
 
+IMPORTANT — quality bar for articles, blog posts, and podcasts:
+- Only include content from reputable, well-known sources: established industry publications (Harvard Business Review, MIT Technology Review, ACM, IEEE, InfoQ, The Register, Wired), respected practitioner blogs (Martin Fowler, Lenny's Newsletter, Stratechery, dbt Blog, Databricks Blog, AWS Blog, Google Cloud Blog), or recognised domain experts with a clear professional track record.
+- For podcasts: only well-established shows with a named host and consistent audience (e.g. Lenny's Podcast, Data Engineering Podcast, The TWIML AI Podcast, Acquired, Software Engineering Daily).
+- Do NOT return: link aggregators (Hacker News, Reddit, Medium tag pages, Substack discovery pages), SEO-farm articles, listicles from unknown blogs, AI-generated content farms, or any page whose primary purpose is aggregating links rather than original content.
+- If you are not confident the source is reputable, omit the item rather than including it.
+
 IMPORTANT — cost_aud field rules:
 - Free items (no cost at all): set cost_aud to 0 (not null)
 - Items with a known cost: set cost_aud to the numeric AUD value
