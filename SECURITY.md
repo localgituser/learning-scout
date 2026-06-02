@@ -2,9 +2,14 @@
 
 ## Reporting a Vulnerability
 
-Please **do not** open a public GitHub issue for security vulnerabilities (exposed tokens, injection risks, etc.).
+Please **do not** open a public GitHub issue or pull request for security vulnerabilities (exposed tokens, injection risks, etc.).
 
-Email: kalrakunal@outlook.com
+Instead, please use GitHub's **Private Vulnerability Reporting** feature:
+
+1. Navigate to the main page of this repository on GitHub.
+2. Under the repository name, click the **Security** tab.
+3. In the left sidebar under "Reporting", click **Advisories**.
+4. Click **Report a vulnerability** to open the advisory form.
 
 I will respond within 7 days. As a personal project with no commercial backing, fixes are made on a best-effort basis.
 
