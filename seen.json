@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "id": "e0b04f4109d0cb7bf03c4de9fd29b1708bb78de8925e84fccb79c365f17a761d",
+      "title": "Melbourne Data Platform User Group (Meetup)",
+      "url": "https://www.meetup.com/melbourne-data-platform-user-group/",
+      "first_seen": "2026-06-02",
+      "status": "skipped"
+    },
+    {
+      "id": "0e3c9aec86f57eef9574262343d944553b3c41a66a4ab462d4123d88999431d3",
+      "title": "DataEngBytes 2026 Conference Tour \u2013 Melbourne",
+      "url": "https://dataengbytes.com/",
+      "first_seen": "2026-06-02",
+      "status": "skipped"
+    },
+    {
+      "id": "065dafcbceccf9b3c9d6df87fe07e1b1783f314ed82a9d4556be6b3cfbf90948",
+      "title": "Databricks Data + AI Summit 2026 \u2013 Free Livestream",
+      "url": "https://www.databricks.com/dataaisummit",
+      "first_seen": "2026-06-02",
+      "status": "skipped"
+    },
+    {
+      "id": "c7579fb98817a9d8747599fe2e8430c03bb661c89e55ec513d558e848a4384ca",
+      "title": "AI Product Manager: The 2026 Transition Guide \u2013 Free Live Webinar (Codebasics)",
+      "url": "https://codebasics.io/event/ai-product-manager-the-2026-transition-guide-free-live-webinar",
+      "first_seen": "2026-06-02",
+      "status": "skipped"
+    },
+    {
+      "id": "1b612800820b4edd28910b6c99d26b1358979a1b6da53cad42715003e08b4ef4",
+      "title": "Product Camp Melbourne 2026",
+      "url": "https://productcampmelbourne.com/",
+      "first_seen": "2026-06-02",
+      "status": "skipped"
+    },
+    {
+      "id": "30db8ae9acc7f37963773524efec712da198ede0b7510af5d9ebd41498ae797c",
+      "title": "LeadDev \u2013 Free Articles, Videos & Engineering Leadership Resource Hub",
+      "url": "https://leaddev.com/",
+      "first_seen": "2026-06-02",
+      "status": "skipped"
+    }
+  ],
+  "blocked_keywords": []
+}
