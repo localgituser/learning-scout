@@ -1,7 +1,6 @@
 from __future__ import annotations
 import asyncio
 import json
-import re
 from typing import Any
 import anthropic
 from anthropic import AsyncAnthropic
@@ -91,12 +90,45 @@ def _build_user_prompt(topic: str, config: AppConfig) -> str:
 
 
 def parse_items_from_response(text: str) -> list[LearningItem]:
-    match = re.search(r"\[.*\]", text, re.DOTALL)
-    if not match:
-        return []
-    try:
-        raw_list: list[Any] = json.loads(match.group())
-    except json.JSONDecodeError:
+    # Try the full text first (model obeyed instructions perfectly)
+    stripped = text.strip()
+    if stripped.startswith("["):
+        try:
+            raw_list: list[Any] = json.loads(stripped)
+            return _validate_items(raw_list)
+        except (json.JSONDecodeError, ValueError):
+            pass
+
+    # Fall back: walk through every top-level [...] block and return the first
+    # that parses as a JSON array — stray [note] style text won't corrupt this.
+    pos = 0
+    while True:
+        start = text.find("[", pos)
+        if start == -1:
+            return []
+        depth = 0
+        end = start
+        for i, ch in enumerate(text[start:], start):
+            if ch == "[":
+                depth += 1
+            elif ch == "]":
+                depth -= 1
+                if depth == 0:
+                    end = i
+                    break
+        candidate = text[start : end + 1]
+        try:
+            raw_list = json.loads(candidate)
+            items = _validate_items(raw_list)
+            if items:
+                return items
+        except (json.JSONDecodeError, ValueError):
+            pass
+        pos = end + 1
+
+
+def _validate_items(raw_list: Any) -> list[LearningItem]:
+    if not isinstance(raw_list, list):
         return []
 
     items: list[LearningItem] = []
