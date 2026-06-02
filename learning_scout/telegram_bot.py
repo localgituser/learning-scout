@@ -56,9 +56,10 @@ def is_authorised(update: Update, allowed_chat_id: str) -> bool:
 
 
 def _github_config() -> GitHubWriterConfig:
+    repo = os.environ.get("GITHUB_STATE_REPO") or os.environ["GITHUB_REPO"]
     return GitHubWriterConfig(
         token=os.environ["GITHUB_TOKEN"],
-        repo=os.environ["GITHUB_REPO"],
+        repo=repo,
     )
 
 

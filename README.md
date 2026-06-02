@@ -90,7 +90,11 @@ cp config.yaml.example config.yaml
 
 `config.yaml` is gitignored — your personal data stays local and is never committed. Edit it with your own role, goals, and preferences. See [Configuring your profile](#configuring-your-profile) below for a full explanation of every field.
 
-### 4. Add GitHub secrets
+### 4. Create a private state repo
+
+`seen.json` tracks every item you've been shown and whether you saved or skipped it. To keep your personal history out of this repo, create a separate **private** GitHub repository — e.g. `your-username/learning-scout-state`. It can be completely empty; the bot will create `seen.json` there on first use.
+
+### 5. Add GitHub secrets
 
 In your forked repo: **Settings → Secrets and variables → Actions → New repository secret**
 
@@ -100,12 +104,13 @@ In your forked repo: **Settings → Secrets and variables → Actions → New re
 | `TELEGRAM_BOT_TOKEN` | From @BotFather in step 1 |
 | `TELEGRAM_CHAT_ID` | Your numeric user ID from @userinfobot |
 | `CONFIG_YAML` | The full contents of your local `config.yaml` file (see below) |
+| `GITHUB_STATE_REPO` | `your-username/learning-scout-state` (the private repo from step 4) |
 
 `GITHUB_TOKEN` is provided automatically by Actions — no action needed for the scout job.
 
 > **Setting `CONFIG_YAML`**: Because `config.yaml` is gitignored (your personal data stays off GitHub), the Actions workflow recreates it at runtime from this secret. Copy the entire contents of your local `config.yaml` and paste it as the secret value.
 
-### 5. Deploy the Telegram bot to Railway
+### 6. Deploy the Telegram bot to Railway
 
 The bot is a small always-on process that listens for Save/Skip button taps and text commands. Railway's free tier is plenty.
 
@@ -124,12 +129,13 @@ In your Railway project dashboard, set these environment variables:
 | `TELEGRAM_CHAT_ID` | Same user ID as above |
 | `GITHUB_TOKEN` | A fine-grained PAT (see below) |
 | `GITHUB_REPO` | `your-username/learning-scout` |
+| `GITHUB_STATE_REPO` | `your-username/learning-scout-state` |
 
-> **Creating the Railway GITHUB_TOKEN**: Go to GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token. Set repository access to **only this repo**, and grant **Contents: Read and write**. This is separate from the Actions token — it lets the Railway bot commit `seen.json` back to your repo when you tap a button.
+> **Creating the Railway GITHUB_TOKEN**: Go to GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token. Set repository access to **Both repositories** (the main repo and the state repo), and grant **Contents: Read and write** on both. This is separate from the Actions token — it lets the Railway bot commit `seen.json` to your state repo when you tap a button.
 
-Every time you tap Save or Skip, the bot commits `seen.json` to your repo. The included `railway.toml` already sets `watchPatterns` so Railway only redeploys when source code changes — `seen.json` updates are ignored automatically.
+Every time you tap Save or Skip, the bot commits `seen.json` to your state repo. The included `railway.toml` already sets `watchPatterns` so Railway only redeploys when source code changes — `seen.json` updates are ignored automatically.
 
-### 6. Test locally before the first live run
+### 7. Test locally before the first live run
 
 ```bash
 pip install -e ".[dev]"
@@ -138,7 +144,7 @@ python -m learning_scout.main --dry-run
 
 This runs the full pipeline (real Claude API call, real web searches) but prints results to the terminal instead of sending to Telegram. Good way to check your profile produces sensible results before Monday.
 
-### 7. Enable the GitHub Actions workflow
+### 8. Enable the GitHub Actions workflow
 
 Go to the **Actions** tab in your forked repo and enable workflows. The scout runs automatically every Monday at 08:00 Melbourne time.
 

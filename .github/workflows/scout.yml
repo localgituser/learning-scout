@@ -39,4 +39,5 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPO: ${{ github.repository }}
+          GITHUB_STATE_REPO: ${{ secrets.GITHUB_STATE_REPO }}
         run: python -m learning_scout.main

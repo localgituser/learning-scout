@@ -55,7 +55,7 @@ async def _run(dry_run: bool = False) -> None:
 
     gh = GitHubWriterConfig(
         token=os.environ["GITHUB_TOKEN"],
-        repo=os.environ["GITHUB_REPO"],
+        repo=os.environ.get("GITHUB_STATE_REPO") or os.environ["GITHUB_REPO"],
     )
     await commit_seen_json(seen, blocked, gh, message="chore: update seen.json after digest [skip ci]")
     print(f"Sent {len(digest.items)} items and committed seen.json to GitHub.")
