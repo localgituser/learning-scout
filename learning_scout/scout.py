@@ -149,7 +149,7 @@ async def search_topic(
 ) -> list[LearningItem]:
     print(f"  → searching: {topic}", flush=True)
     response = await client.messages.create(
-        model="claude-sonnet-4-6",
+        model=config.search.model,
         max_tokens=2048,
         system=SYSTEM_PROMPT,
         messages=[{"role": "user", "content": _build_user_prompt(topic, config)}],
@@ -171,8 +171,9 @@ async def run_search(
         client = AsyncAnthropic()
 
     topics = config.profile.topics_of_interest[: config.search.topics_per_run]
-    print(f"Searching {len(topics)} topics (3 concurrent)...", flush=True)
-    sem = asyncio.Semaphore(3)
+    concurrency = config.search.max_concurrent_searches
+    print(f"Searching {len(topics)} topics ({concurrency} concurrent)...", flush=True)
+    sem = asyncio.Semaphore(concurrency)
 
     async def _bounded(topic: str) -> list[LearningItem]:
         async with sem:

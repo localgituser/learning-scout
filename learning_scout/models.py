@@ -28,6 +28,8 @@ class SearchConfig(BaseModel):
     results_per_topic: int = 5
     min_relevance_score: float = 6.0
     digest_size: int = 8
+    max_concurrent_searches: int = 3
+    model: str = "claude-sonnet-4-6"
 
 
 class CategorySlots(BaseModel):
