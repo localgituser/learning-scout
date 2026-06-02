@@ -1,5 +1,4 @@
 from __future__ import annotations
-import hashlib
 import json
 import os
 import tempfile
@@ -11,8 +10,9 @@ SEEN_PATH = Path("seen.json")
 
 
 def compute_hash(title: str, url: str) -> str:
-    key = f"{title.lower().strip()}|{url.lower().strip()}"
-    return hashlib.sha256(key.encode()).hexdigest()
+    """Delegate to the canonical implementation on LearningItem."""
+    from learning_scout.models import _hash_key
+    return _hash_key(title, url)
 
 
 def load_seen(path: Path = SEEN_PATH) -> tuple[dict[str, SeenItem], list[str]]:

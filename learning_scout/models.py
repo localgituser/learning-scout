@@ -1,8 +1,13 @@
 from __future__ import annotations
+import hashlib
 from datetime import date, datetime
 from typing import Literal, Optional
 from pydantic import BaseModel, Field, field_validator
-import hashlib
+
+
+def _hash_key(title: str, url: str) -> str:
+    key = f"{title.lower().strip()}|{url.lower().strip()}"
+    return hashlib.sha256(key.encode()).hexdigest()
 
 
 CareerStage = Literal["early", "mid", "mid-senior", "senior", "exec"]
@@ -77,8 +82,7 @@ class LearningItem(BaseModel):
 
     @property
     def content_hash(self) -> str:
-        key = f"{self.title.lower().strip()}|{self.url.lower().strip()}"
-        return hashlib.sha256(key.encode()).hexdigest()
+        return _hash_key(self.title, self.url)
 
 
 class SeenItem(BaseModel):
