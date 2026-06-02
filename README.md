@@ -1,5 +1,8 @@
 # Learning Scout
 
+> **License:** [PolyForm Noncommercial 1.0.0](LICENSE) — free for personal use, no commercial derivatives.
+> **Disclaimer:** This software is provided as-is, without warranty of any kind. The author accepts no liability for damages arising from its use, including account suspensions, data loss, or unintended messages. You are responsible for complying with the terms of service of any third-party platforms this bot interacts with (Telegram, Anthropic, etc.). Use at your own risk.
+
 A personal AI agent that finds conferences, courses, and learning opportunities tailored to your career goals — then delivers a weekly digest to your Telegram.
 
 No dashboard. No SaaS subscription. Just a Monday morning nudge with things worth your attention — and a quick tap to tell it what to keep or skip.
