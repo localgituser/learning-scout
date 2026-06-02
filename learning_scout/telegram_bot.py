@@ -160,8 +160,11 @@ async def _handle_block(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     seen, blocked = load_seen()
     blocked = add_blocked_keyword(blocked, keyword)
     save_seen(seen, blocked)
-    gh = _github_config()
-    await commit_seen_json(seen, blocked, gh)
+    try:
+        gh = _github_config()
+        await commit_seen_json(seen, blocked, gh)
+    except Exception as exc:
+        print(f"[block] GitHub commit failed (local state saved): {exc}", flush=True)
     await update.message.reply_text(f'🚫 Blocked: "{keyword}". It won\'t appear in future digests.')
 
 
