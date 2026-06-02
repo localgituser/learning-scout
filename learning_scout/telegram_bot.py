@@ -64,7 +64,7 @@ def _github_config() -> GitHubWriterConfig:
 
 async def send_digest(digest: Digest, config: AppConfig) -> None:
     bot_token = os.environ["TELEGRAM_BOT_TOKEN"]
-    chat_id = config.delivery.telegram_chat_id if hasattr(config.delivery, "telegram_chat_id") else os.environ["TELEGRAM_CHAT_ID"]
+    chat_id = config.delivery.telegram_chat_id or os.environ["TELEGRAM_CHAT_ID"]
 
     app = Application.builder().token(bot_token).build()
     async with app:
@@ -106,7 +106,9 @@ async def _handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         await query.edit_message_text("⚠️ Item not found — it may have expired.")
         return
     matched = candidates[0]
-    seen[matched.id] = matched.model_copy(update={"status": parsed.action + "d"})  # saved / skipped
+    _ACTION_TO_STATUS = {"save": "saved", "skip": "skipped"}
+    new_status = _ACTION_TO_STATUS[parsed.action]
+    seen[matched.id] = matched.model_copy(update={"status": new_status})
     save_seen(seen, blocked)
 
     gh = _github_config()

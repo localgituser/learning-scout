@@ -81,9 +81,13 @@ def test_apply_scores_sorted_descending(sample_config):
 # --- filter_by_min_score ---
 
 def test_filter_drops_below_threshold(sample_config):
-    items = [make_item(raw_score=5.0), make_item(title="B", url="https://b.com", raw_score=7.0)]
+    # final_score is what's checked; set it explicitly
+    low = make_item(raw_score=5.0)
+    low = low.model_copy(update={"final_score": 5.0})
+    high = make_item(title="B", url="https://b.com", raw_score=7.0)
+    high = high.model_copy(update={"final_score": 7.0})
     # sample_config has min_relevance_score=6
-    result = filter_by_min_score(items, sample_config.search.min_relevance_score)
+    result = filter_by_min_score([low, high], sample_config.search.min_relevance_score)
     assert len(result) == 1
     assert result[0].raw_score == 7.0
 

@@ -37,7 +37,11 @@ async def _run(dry_run: bool = False) -> None:
             print(f"  [{item.category}] {item.title} — score {item.final_score:.1f}")
         return
 
-    await send_digest(digest, config)
+    try:
+        await send_digest(digest, config)
+    except Exception as exc:
+        print(f"Failed to send digest: {exc}", file=sys.stderr)
+        sys.exit(1)
 
     today = date.today()
     for item in digest.items:

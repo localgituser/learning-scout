@@ -22,7 +22,7 @@ def compute_timeliness_modifier(item: LearningItem, as_of: date | None = None) -
 
 
 def filter_by_min_score(items: list[LearningItem], min_score: float) -> list[LearningItem]:
-    return [i for i in items if i.raw_score >= min_score]
+    return [i for i in items if i.final_score >= min_score]
 
 
 def apply_scores(items: list[LearningItem], config: AppConfig) -> list[LearningItem]:
@@ -56,8 +56,9 @@ def enforce_slots(items: list[LearningItem], digest_config: DigestConfig) -> lis
 
 def build_digest(items: list[LearningItem], config: AppConfig) -> Digest:
     filtered = _filter_budget(items, config.budget_aud)
-    filtered = filter_by_min_score(filtered, config.search.min_relevance_score)
     scored = apply_scores(filtered, config)
+    # filter after scoring so timeliness modifiers are considered
+    scored = filter_by_min_score(scored, config.search.min_relevance_score)
 
     if config.digest.enforce_category_mix:
         selected = enforce_slots(scored, config.digest)

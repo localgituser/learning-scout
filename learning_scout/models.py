@@ -46,6 +46,7 @@ class DeliveryConfig(BaseModel):
     send_day: str = "monday"
     send_time: str = "08:00"
     timezone: str = "Australia/Melbourne"
+    telegram_chat_id: Optional[str] = None  # falls back to TELEGRAM_CHAT_ID env var if unset
 
 
 class AppConfig(BaseModel):
