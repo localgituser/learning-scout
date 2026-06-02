@@ -92,8 +92,11 @@ In your forked repo: **Settings → Secrets and variables → Actions → New re
 | `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) |
 | `TELEGRAM_BOT_TOKEN` | From @BotFather in step 1 |
 | `TELEGRAM_CHAT_ID` | Your numeric user ID from @userinfobot |
+| `CONFIG_YAML` | The full contents of your local `config.yaml` file (see below) |
 
 `GITHUB_TOKEN` is provided automatically by Actions — no action needed for the scout job.
+
+> **Setting `CONFIG_YAML`**: Because `config.yaml` is gitignored (your personal data stays off GitHub), the Actions workflow recreates it at runtime from this secret. Copy the entire contents of your local `config.yaml` and paste it as the secret value.
 
 ### 5. Deploy the Telegram bot to Railway
 
