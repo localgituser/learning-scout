@@ -39,6 +39,9 @@ def apply_scores(items: list[LearningItem], config: AppConfig) -> list[LearningI
 def _filter_budget(items: list[LearningItem], budget_aud: float | None) -> list[LearningItem]:
     if budget_aud is None:
         return items
+    if budget_aud == 0:
+        # zero budget: only items explicitly marked as free (cost_aud == 0)
+        return [i for i in items if i.cost_aud is not None and i.cost_aud == 0]
     return [i for i in items if i.cost_aud is None or i.cost_aud <= budget_aud]
 
 

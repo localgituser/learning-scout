@@ -3,7 +3,7 @@
 > **License:** [PolyForm Noncommercial 1.0.0](LICENSE) — free for personal use, no commercial derivatives.
 > **Disclaimer:** This software is provided as-is, without warranty of any kind. The author accepts no liability for damages arising from its use, including account suspensions, data loss, or unintended messages. You are responsible for complying with the terms of service of any third-party platforms this bot interacts with (Telegram, Anthropic, etc.). Use at your own risk.
 
-A personal AI agent that finds conferences, courses, and learning opportunities tailored to your career goals — then delivers a weekly digest to your Telegram.
+A personal AI agent that finds learning opportunities tailored to your career goals — conferences, courses, webinars, articles, podcasts, community spaces, and more — then delivers a weekly digest to your Telegram.
 
 No dashboard. No SaaS subscription. Just a Monday morning nudge with things worth your attention — and a quick tap to tell it what to keep or skip.
 
@@ -21,6 +21,13 @@ A typical digest looks like:
 > Online · Rolling cohorts · ~$2,500 AUD
 >
 > Relevant given your data platform background and interest in strategic thinking at scale.
+>
+> [💾 Save]   [⏭ Skip]
+
+> 🎙️ **Locally Optimistic Slack Community**
+> Free · Data analytics & data platform practitioners
+>
+> Active Slack workspace with practitioners from Airbnb, dbt Labs, and Shopify — strong signal-to-noise for senior data platform discussions.
 >
 > [💾 Save]   [⏭ Skip]
 
@@ -226,12 +233,12 @@ digest:
 
   categories:
     in_person_events: 1    # physical conferences, summits, workshops
-    online_events: 2       # virtual conferences, vendor summits (Snowflake, dbt, etc.)
-    meetups: 1             # Meetup.com groups, user groups, community nights
-    online_courses: 2      # self-paced courses, video series
+    online_events: 1       # virtual conferences, live webinars, vendor summits
+    meetups: 1             # Meetup.com groups, Slack/Discord communities, user groups
+    online_courses: 2      # self-paced courses, YouTube playlists, tutorials
     cohort_programs: 1     # Reforge, On Deck, structured cohorts
-    books_or_resources: 1  # books, guides, frameworks
-    wildcard: 1            # anything high-scoring that doesn't fit above
+    books_or_resources: 1  # books, newsletters, articles, podcast episodes
+    wildcard: 1            # open-source projects, frameworks, anything high-value
   # These are slot limits, not guarantees. Empty slots stay empty.
 
 
@@ -257,7 +264,7 @@ delivery:
 
 **Use `regions` to reduce noise** — if you're based in Australia and only interested in online or APAC events, remove `north-america` and `europe` from the list. It narrows the search considerably.
 
-**`budget_aud: null` is valid** — if you want to see everything regardless of cost and decide yourself, remove the `budget_aud` line entirely.
+**`budget_aud: 0` means free only** — the agent will return only items explicitly marked as free (no cost). Items with unknown pricing ("TBA") are excluded, not snuck through. Set to `null` (or remove the line) to see everything regardless of cost.
 
 ---
 
