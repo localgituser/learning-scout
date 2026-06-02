@@ -1,13 +1,13 @@
 from __future__ import annotations
 import base64
 import json
-from pydantic import BaseModel
+from pydantic import BaseModel, SecretStr
 import httpx
 from learning_scout.models import SeenItem
 
 
 class GitHubWriterConfig(BaseModel):
-    token: str
+    token: SecretStr
     repo: str
     branch: str = "main"
     committer_name: str = "Learning Scout Bot"
@@ -33,7 +33,7 @@ async def fetch_seen_json(
     """Fetch raw JSON content of path from GitHub. Returns None if not found."""
     api_url = f"https://api.github.com/repos/{config.repo}/contents/{path}"
     headers = {
-        "Authorization": f"Bearer {config.token}",
+        "Authorization": f"Bearer {config.token.get_secret_value()}",
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
     }
@@ -56,7 +56,7 @@ async def commit_seen_json(
 ) -> None:
     api_url = f"https://api.github.com/repos/{config.repo}/contents/{path}"
     headers = {
-        "Authorization": f"Bearer {config.token}",
+        "Authorization": f"Bearer {config.token.get_secret_value()}",
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
     }
