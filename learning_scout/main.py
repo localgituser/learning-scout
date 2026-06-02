@@ -9,6 +9,7 @@ from pathlib import Path
 from anthropic import AsyncAnthropic
 
 from learning_scout.config_loader import load_config, ConfigValidationError
+from learning_scout.github_writer import GitHubWriterConfig, commit_seen_json
 from learning_scout.memory import load_seen, save_seen, filter_unseen, filter_blocked, mark_seen
 from learning_scout.scout import run_search
 from learning_scout.scorer import build_digest
@@ -51,7 +52,13 @@ async def _run(dry_run: bool = False) -> None:
     for item in digest.items:
         seen = mark_seen(seen, item, "skipped", today)  # default to skipped; bot upgrades to saved
     save_seen(seen, blocked)
-    print(f"Sent {len(digest.items)} items and updated seen.json.")
+
+    gh = GitHubWriterConfig(
+        token=os.environ["GITHUB_TOKEN"],
+        repo=os.environ["GITHUB_REPO"],
+    )
+    await commit_seen_json(seen, blocked, gh, message="chore: update seen.json after digest [skip ci]")
+    print(f"Sent {len(digest.items)} items and committed seen.json to GitHub.")
 
 
 def main() -> None:
