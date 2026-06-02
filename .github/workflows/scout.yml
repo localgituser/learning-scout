@@ -27,6 +27,11 @@ jobs:
       - name: Run tests
         run: pytest tests/ -x -q
 
+      - name: Write config
+        env:
+          CONFIG_YAML: ${{ secrets.CONFIG_YAML }}
+        run: echo "$CONFIG_YAML" > config.yaml
+
       - name: Run Learning Scout
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
