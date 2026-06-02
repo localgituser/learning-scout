@@ -123,8 +123,11 @@ async def _handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     seen[matched.id] = matched.model_copy(update={"status": new_status})
     save_seen(seen, blocked)
 
-    gh = _github_config()
-    await commit_seen_json(seen, blocked, gh)
+    try:
+        gh = _github_config()
+        await commit_seen_json(seen, blocked, gh)
+    except Exception as exc:
+        print(f"[callback] GitHub commit failed (local state saved): {exc}", flush=True)
 
     label = "💾 Saved!" if parsed.action == "save" else "⏭ Skipped"
     original_html = query.message.text_html or ""
