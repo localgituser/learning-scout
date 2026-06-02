@@ -41,6 +41,34 @@
       "url": "https://leaddev.com/",
       "first_seen": "2026-06-02",
       "status": "skipped"
+    },
+    {
+      "id": "c726f834748dc35eb71ea3917422635f3b323a8354fe66bcade3cbfd51556bb0",
+      "title": "DataEngBytes Community (Meetup + Slack + YouTube)",
+      "url": "https://dataengbytes.com/",
+      "first_seen": "2026-06-02",
+      "status": "skipped"
+    },
+    {
+      "id": "139d5e8f1ad48f0db59517cc38ccdff48c5c4368a58d984a69abe201ea20db85",
+      "title": "ProductCon Online 2026 \u2013 AI Product Conference",
+      "url": "https://productschool.com/productcon/online-2026",
+      "first_seen": "2026-06-02",
+      "status": "skipped"
+    },
+    {
+      "id": "5c4033da9b404f7f046bc41bb42c6db906156987cf27e7c1050203bea4fc35b9",
+      "title": "ProductCon Online \u2014 Free Livestream Access",
+      "url": "https://productschool.com/productcon",
+      "first_seen": "2026-06-02",
+      "status": "skipped"
+    },
+    {
+      "id": "63fe796441230cd4d4d85f3fb9ac4fcfb9cc2876f70cd5b56253a1e479d7ba7e",
+      "title": "The Product Experience Podcast (Mind the Product)",
+      "url": "https://www.mindtheproduct.com/the-product-experience/",
+      "first_seen": "2026-06-02",
+      "status": "skipped"
     }
   ],
   "blocked_keywords": []
