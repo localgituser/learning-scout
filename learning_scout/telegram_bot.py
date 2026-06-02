@@ -168,9 +168,19 @@ async def _handle_block(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 async def _handle_reset(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if not is_authorised(update, os.environ["TELEGRAM_CHAT_ID"]):
         return
+    args = context.args or []
+    if not args or args[0].lower() != "confirm":
+        await update.message.reply_text(
+            "⚠️ This clears <b>all</b> seen history. To confirm, send:\n<code>/reset confirm</code>",
+            parse_mode=ParseMode.HTML,
+        )
+        return
     save_seen({}, [])
-    gh = _github_config()
-    await commit_seen_json({}, [], gh)
+    try:
+        gh = _github_config()
+        await commit_seen_json({}, [], gh)
+    except Exception as exc:
+        print(f"[reset] GitHub commit failed (local state cleared): {exc}", flush=True)
     await update.message.reply_text("♻️ History cleared. Next digest starts fresh.")
 
 
