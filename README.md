@@ -127,6 +127,8 @@ In your Railway project dashboard, set these environment variables:
 
 > **Creating the Railway GITHUB_TOKEN**: Go to GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token. Set repository access to **only this repo**, and grant **Contents: Read and write**. This is separate from the Actions token — it lets the Railway bot commit `seen.json` back to your repo when you tap a button.
 
+Every time you tap Save or Skip, the bot commits `seen.json` to your repo. The included `railway.toml` already sets `watchPatterns` so Railway only redeploys when source code changes — `seen.json` updates are ignored automatically.
+
 ### 6. Test locally before the first live run
 
 ```bash
