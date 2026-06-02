@@ -165,6 +165,14 @@ async def _handle_block(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     await update.message.reply_text(f'🚫 Blocked: "{keyword}". It won\'t appear in future digests.')
 
 
+async def _handle_blocked(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not is_authorised(update, os.environ["TELEGRAM_CHAT_ID"]):
+        return
+    _, blocked = load_seen()
+    text = format_blocked_list(blocked)
+    await update.message.reply_text(text, parse_mode=ParseMode.HTML)
+
+
 async def _handle_reset(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if not is_authorised(update, os.environ["TELEGRAM_CHAT_ID"]):
         return
@@ -207,5 +215,6 @@ def build_application(bot_token: str) -> Application:
     app.add_handler(CallbackQueryHandler(_handle_callback))
     app.add_handler(CommandHandler("saved", _handle_saved))
     app.add_handler(CommandHandler("block", _handle_block))
+    app.add_handler(CommandHandler("blocked", _handle_blocked))
     app.add_handler(CommandHandler("reset", _handle_reset))
     return app

@@ -9,7 +9,6 @@ from learning_scout.memory import (
     is_seen,
     mark_seen,
     filter_unseen,
-    get_blocked_keywords,
     add_blocked_keyword,
 )
 from learning_scout.models import LearningItem, SeenItem
@@ -101,7 +100,3 @@ def test_blocked_keywords_roundtrip(seen_path):
     assert "mba" in reloaded
 
 
-def test_get_blocked_keywords_lowercase():
-    blocked = ["MBA", "BootCamp"]
-    result = get_blocked_keywords(blocked)
-    assert result == ["mba", "bootcamp"]

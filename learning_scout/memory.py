@@ -83,10 +83,6 @@ def filter_blocked(items: list[LearningItem], blocked: list[str]) -> list[Learni
     ]
 
 
-def get_blocked_keywords(blocked: list[str]) -> list[str]:
-    return [kw.lower() for kw in blocked]
-
-
 def add_blocked_keyword(blocked: list[str], keyword: str) -> list[str]:
     kw = keyword.lower().strip()
     if kw not in blocked:
