@@ -6,6 +6,7 @@ build/
 .venv/
 venv/
 .env
+config.yaml
 .coverage
 htmlcov/
 .pytest_cache/

@@ -72,7 +72,13 @@ cd learning-scout
 
 ### 3. Configure your profile
 
-Edit `config.yaml` — this is the only file you need to change. See [Configuring your profile](#configuring-your-profile) below for a full explanation of every field.
+Copy the example config and fill in your details:
+
+```bash
+cp config.yaml.example config.yaml
+```
+
+`config.yaml` is gitignored — your personal data stays local and is never committed. Edit it with your own role, goals, and preferences. See [Configuring your profile](#configuring-your-profile) below for a full explanation of every field.
 
 ### 4. Add GitHub secrets
 

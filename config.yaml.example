@@ -1,0 +1,100 @@
+# Copy this file to config.yaml and fill in your details.
+# config.yaml is gitignored — your personal data stays local.
+#
+# cp config.yaml.example config.yaml
+
+# ── Who you are ──────────────────────────────────────────────────────────────
+profile:
+  current_role: "Senior Product Manager – Data Platforms"
+  # Your actual job title. More specific = better results.
+  # e.g. "Engineering Manager, Platform Teams" or "UX Lead, Fintech startup"
+
+  target_role: "Group PM / Head of Product"
+  # Where you're trying to get to. Used to weight stepping-stone opportunities.
+
+  career_stage: mid-senior
+  # One of: early | mid | mid-senior | senior | exec
+  # Controls seniority level of content surfaced.
+
+  years_experience: 10
+
+  topics_of_interest:
+    - data platforms
+    - product strategy
+    - AI/ML product management
+    - engineering leadership
+  # Each topic is used as a search query. Be specific:
+  # "data platforms" > "data". Aim for 4–8 topics.
+
+
+# ── Budget and logistics ──────────────────────────────────────────────────────
+budget_aud: 3000
+# Max cost (AUD) per opportunity. Items above this are filtered out.
+# Remove this line (or set to null) to disable budget filtering.
+
+format_preference:
+  - online
+  - in-person
+# Formats you'd actually attend. Options: online | in-person
+# Delete a line to exclude that format entirely.
+
+regions:
+  - australia
+  - asia-pacific
+  - online
+# Geographic scope for searches. Common values:
+# australia | asia-pacific | online | north-america | europe | global
+
+commitment:
+  - short
+  - medium
+# Time you're willing to invest per opportunity:
+#   short  = 1–2 days (conference, workshop)
+#   medium = up to 1 week (intensive, short course)
+#   long   = multi-week (Reforge cohort, extended program)
+
+
+# ── Search behaviour ──────────────────────────────────────────────────────────
+search:
+  topics_per_run: 8
+  # How many topics to search each week. If you have more topics than this,
+  # a rotating subset is used.
+
+  results_per_topic: 5
+  # Candidates fetched per query before scoring. Higher = more thorough,
+  # slightly slower and more expensive.
+
+  min_relevance_score: 6
+  # Items scored below this (1–10) are dropped. Lower to 5 if digests are
+  # too sparse; raise to 7 for a tighter filter.
+
+  digest_size: 8
+  # Max items per weekly digest.
+
+
+# ── Category mix ─────────────────────────────────────────────────────────────
+digest:
+  enforce_category_mix: true
+  # When true, enforces a spread of opportunity types (prevents 8 Reforge
+  # courses in a row). Set to false to rank purely by relevance score.
+
+  categories:
+    in_person_events: 2    # conferences, summits, workshops
+    online_courses: 2      # self-paced courses, video series
+    cohort_programs: 2     # Reforge, On Deck, structured cohorts
+    books_or_resources: 1  # books, guides, frameworks
+    wildcard: 1            # anything high-scoring that doesn't fit above
+  # These are slot limits, not guarantees. Empty slots stay empty.
+
+
+# ── Delivery ─────────────────────────────────────────────────────────────────
+delivery:
+  channel: telegram        # only telegram is supported currently
+
+  send_day: monday
+  send_time: "08:00"
+  timezone: "Australia/Melbourne"
+  # If you change timezone, update the cron in .github/workflows/scout.yml too.
+
+  telegram_chat_id:        # optional — overrides the TELEGRAM_CHAT_ID env var/secret
+                           # leave blank to use the GitHub Actions secret
