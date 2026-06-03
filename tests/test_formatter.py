@@ -84,9 +84,10 @@ def test_format_saved_list_with_items():
 def test_category_emoji_covers_all_categories():
     from learning_scout.models import ItemCategory
     categories: list[ItemCategory] = [
-        "in_person_events", "online_courses", "cohort_programs",
-        "books_or_resources", "wildcard",
+        "in_person_events", "online_events", "meetups",
+        "online_courses", "cohort_programs", "books_or_resources", "wildcard",
     ]
     for cat in categories:
         emoji = category_emoji(cat)
         assert isinstance(emoji, str) and len(emoji) > 0
+        assert emoji != "📌", f"category '{cat}' is missing from _CATEGORY_EMOJI"

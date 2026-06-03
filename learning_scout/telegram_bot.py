@@ -204,7 +204,7 @@ async def _hydrate_seen(app: Application) -> None:
     try:
         gh = _github_config()
     except KeyError:
-        return  # GITHUB_TOKEN / GITHUB_REPO not set — skip
+        return  # GH_PAT / GITHUB_REPO not set — skip (local dev without state repo)
     try:
         raw = await fetch_seen_json(gh)
     except Exception as exc:
