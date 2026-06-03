@@ -6,7 +6,7 @@ build/
 .venv/
 venv/
 .env
-.claude/PROJECT.MD
+.claude/
 config.yaml
 seen.json
 .coverage
