@@ -22,10 +22,9 @@ VALID_CONFIG = {
         "enforce_category_mix": True,
         "categories": {
             "in_person_events": 2,
-            "online_courses": 2,
-            "cohort_programs": 2,
-            "books_or_resources": 1,
-            "wildcard": 1,
+            "online_events": 1,
+            "meetups": 1,
+            "courses": 2,
         },
     },
     "delivery": {

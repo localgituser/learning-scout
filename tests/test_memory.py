@@ -20,7 +20,7 @@ def item():
         title="Reforge: Product Strategy",
         url="https://reforge.com/product-strategy",
         description="Cohort program",
-        category="cohort_programs",
+        category="courses",
     )
 
 

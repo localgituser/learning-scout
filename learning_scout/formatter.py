@@ -1,16 +1,24 @@
 from __future__ import annotations
 import html
 import re
+from datetime import date
 from learning_scout.models import ItemCategory, LearningItem, SeenItem
 
 _CATEGORY_EMOJI: dict[str, str] = {
     "in_person_events": "🎯",
     "online_events": "🖥️",
     "meetups": "👥",
-    "online_courses": "📚",
-    "cohort_programs": "🤝",
-    "books_or_resources": "📖",
-    "wildcard": "⭐",
+    "courses": "📚",
+}
+
+_DEADLINE_LABEL: dict[str, str] = {
+    "early_bird": "⏰ Early bird closes",
+    "cfp": "📝 CFP closes",
+    "scholarship": "🎓 Scholarship deadline",
+    "enrolment": "📋 Enrolment closes",
+    "certification": "🏆 Certification window closes",
+    "mentorship": "🤝 Mentorship application closes",
+    "registration": "⚠️ Registration closes",
 }
 
 _SAFE_URL_RE = re.compile(r"^https?://", re.IGNORECASE)
@@ -33,10 +41,14 @@ def _cost_text(item: LearningItem) -> str:
     return f"~${item.cost_aud:,.0f} AUD"
 
 
-def _deadline_text(item: LearningItem) -> str:
-    if item.deadline:
-        return f"⚠️ Early bird deadline: {item.deadline}"
-    return ""
+def _deadline_text(item: LearningItem, today: date | None = None) -> str:
+    if not item.deadline:
+        return ""
+    today = today or date.today()
+    if item.deadline < today:
+        return ""
+    label = _DEADLINE_LABEL.get(item.deadline_type or "", "⚠️ Deadline")
+    return f"{label}: {item.deadline}"
 
 
 def format_item_html(item: LearningItem, index: int) -> str:

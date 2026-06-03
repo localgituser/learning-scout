@@ -30,7 +30,7 @@ def item_no_cost():
         title="Free Webinar",
         url="https://example.com/webinar",
         description="Free online event.",
-        category="online_courses",
+        category="courses",
         raw_score=6.5,
         final_score=6.5,
     )
@@ -84,8 +84,7 @@ def test_format_saved_list_with_items():
 def test_category_emoji_covers_all_categories():
     from learning_scout.models import ItemCategory
     categories: list[ItemCategory] = [
-        "in_person_events", "online_events", "meetups",
-        "online_courses", "cohort_programs", "books_or_resources", "wildcard",
+        "in_person_events", "online_events", "meetups", "courses",
     ]
     for cat in categories:
         emoji = category_emoji(cat)

@@ -95,7 +95,7 @@ def test_filter_drops_below_threshold(sample_config):
 # --- enforce_slots ---
 
 def test_enforce_slots_limits_per_category(sample_config):
-    # sample_config CategorySlots: in_person=1, online=1, cohort=1, books=0, wildcard=1
+    # sample_config CategorySlots: in_person=1, online_events=1, meetups=1, courses=2
     items = [
         make_item(title=f"Conf {i}", url=f"https://c{i}.com", category="in_person_events", raw_score=float(10 - i))
         for i in range(3)
@@ -105,15 +105,16 @@ def test_enforce_slots_limits_per_category(sample_config):
     assert len(in_person) == 1  # slot limit for sample_config
 
 
-def test_enforce_slots_fills_wildcard(sample_config):
+def test_enforce_slots_fills_courses(sample_config):
     items = [
-        make_item(title="Course 1", url="https://c1.com", category="online_courses", raw_score=9.0),
-        make_item(title="Course 2", url="https://c2.com", category="online_courses", raw_score=8.0),
-        make_item(title="Wildcard", url="https://w.com", category="wildcard", raw_score=7.0),
+        make_item(title="Course 1", url="https://c1.com", category="courses", raw_score=9.0),
+        make_item(title="Course 2", url="https://c2.com", category="courses", raw_score=8.0),
+        make_item(title="Meetup 1", url="https://m1.com", category="meetups", raw_score=7.0),
     ]
     result = enforce_slots(items, sample_config.digest)
     categories = {x.category for x in result}
-    assert "wildcard" in categories
+    assert "courses" in categories
+    assert "meetups" in categories
 
 
 def test_enforce_slots_respects_digest_size(sample_config):

@@ -20,7 +20,7 @@ MOCK_RESPONSE_TEXT = """
     "title": "Reforge: Product Strategy",
     "url": "https://reforge.com/product-strategy",
     "description": "Cohort program on strategic thinking.",
-    "category": "cohort_programs",
+    "category": "courses",
     "cost_aud": 2500.0,
     "raw_score": 7.0
   }
@@ -36,7 +36,7 @@ Some text before
     "title": "Good Item",
     "url": "https://good.com",
     "description": "Great course",
-    "category": "online_courses",
+    "category": "courses",
     "raw_score": 7.0
   }
 ]
@@ -64,7 +64,7 @@ def test_parse_items_from_response_garbage_returns_empty():
 
 
 def test_parse_items_skips_invalid_items():
-    text = '[{"title": "OK", "url": "https://ok.com", "description": "d", "category": "wildcard", "raw_score": 6.0}, {"bad": "item"}]'
+    text = '[{"title": "OK", "url": "https://ok.com", "description": "d", "category": "meetups", "raw_score": 6.0}, {"bad": "item"}]'
     items = parse_items_from_response(text)
     assert len(items) == 1
 

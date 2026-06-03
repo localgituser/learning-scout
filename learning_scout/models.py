@@ -12,7 +12,8 @@ def _hash_key(title: str, url: str) -> str:
 
 CareerStage = Literal["early", "mid", "mid-senior", "senior", "exec"]
 ItemStatus = Literal["saved", "skipped", "blocked"]
-ItemCategory = Literal["in_person_events", "online_events", "meetups", "online_courses", "cohort_programs", "books_or_resources", "wildcard"]
+ItemCategory = Literal["in_person_events", "online_events", "meetups", "courses"]
+DeadlineType = Literal["early_bird", "cfp", "scholarship", "enrolment", "certification", "mentorship", "registration"]
 
 
 class UserProfile(BaseModel):
@@ -34,12 +35,9 @@ class SearchConfig(BaseModel):
 
 class CategorySlots(BaseModel):
     in_person_events: int = 1
-    online_events: int = 2
+    online_events: int = 1
     meetups: int = 1
-    online_courses: int = 2
-    cohort_programs: int = 1
-    books_or_resources: int = 1
-    wildcard: int = 1
+    courses: int = 3
 
     def as_dict(self) -> dict[str, int]:
         return self.model_dump()
@@ -75,6 +73,7 @@ class LearningItem(BaseModel):
     description: str
     category: ItemCategory
     deadline: Optional[date] = None
+    deadline_type: Optional[DeadlineType] = None
     event_date: Optional[date] = None
     cost_aud: Optional[float] = None
     source: str = ""

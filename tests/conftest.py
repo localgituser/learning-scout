@@ -31,10 +31,9 @@ def sample_config(tmp_path) -> AppConfig:
             enforce_category_mix=True,
             categories=CategorySlots(
                 in_person_events=1,
-                online_courses=1,
-                cohort_programs=1,
-                books_or_resources=0,
-                wildcard=1,
+                online_events=1,
+                meetups=1,
+                courses=2,
             ),
         ),
         delivery=DeliveryConfig(
