@@ -4,7 +4,7 @@ compatibility_date = "2025-01-01"
 
 [[kv_namespaces]]
 binding = "STATE"
-id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+id = "paste-your-namespace-id-here"
 # preview_id = "REPLACE_WITH_YOUR_KV_PREVIEW_ID"  # for wrangler dev
 
 [vars]

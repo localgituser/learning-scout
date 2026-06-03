@@ -96,12 +96,13 @@ The Worker receives Telegram button taps, handles commands, and stores your seen
 ```bash
 cd worker
 npm install
+cp wrangler.toml.example wrangler.toml
 ```
 
 **Create a KV namespace:**
 
 ```bash
-npx wrangler kv:namespace create STATE
+npx wrangler kv namespace create STATE
 ```
 
 Copy the `id` from the output and paste it into `worker/wrangler.toml`:

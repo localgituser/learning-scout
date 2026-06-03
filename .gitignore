@@ -12,3 +12,4 @@ seen.json
 .coverage
 htmlcov/
 .pytest_cache/
+worker/wrangler.toml
