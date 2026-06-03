@@ -92,6 +92,7 @@ class SeenItem(BaseModel):
     url: str
     first_seen: date
     status: ItemStatus
+    saved_at: Optional[datetime] = None
 
 
 class Digest(BaseModel):

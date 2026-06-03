@@ -28,6 +28,7 @@ interface SeenItem {
   url: string;
   first_seen: string;
   status: ItemStatus;
+  saved_at?: string;
 }
 
 interface State {
@@ -76,7 +77,13 @@ async function getState(env: Env): Promise<State> {
 }
 
 async function putState(env: Env, state: State): Promise<void> {
-  await env.STATE.put("seen_state", JSON.stringify(state));
+  const cutoff = new Date();
+  cutoff.setFullYear(cutoff.getFullYear() - 1);
+  const pruned: State = {
+    ...state,
+    items: state.items.filter(item => new Date(item.first_seen) >= cutoff),
+  };
+  await env.STATE.put("seen_state", JSON.stringify(pruned));
 }
 
 // ── Telegram API helper ─────────────────────────────────────────────────────
@@ -139,6 +146,9 @@ async function handleCallbackQuery(query: TelegramCallbackQuery, env: Env): Prom
 
   const matched = candidates[0];
   matched.status = ACTION_TO_STATUS[action];
+  if (action === "save") {
+    matched.saved_at = new Date().toISOString();
+  }
   await putState(env, state);
 
   const label = ACTION_LABEL[action];
@@ -167,7 +177,13 @@ async function handleMessage(message: TelegramMessage, env: Env): Promise<void> 
 
   if (text.startsWith("/saved")) {
     const state = await getState(env);
-    const saved = state.items.filter((item) => item.status === "saved");
+    const saved = state.items
+      .filter((item) => item.status === "saved")
+      .sort((a, b) => {
+        const ta = a.saved_at ?? a.first_seen;
+        const tb = b.saved_at ?? b.first_seen;
+        return tb.localeCompare(ta);
+      });
     if (saved.length === 0) {
       await callTelegram(env.TELEGRAM_BOT_TOKEN, "sendMessage", {
         chat_id: chatId,
