@@ -1,8 +1,0 @@
-[build]
-builder = "nixpacks"
-
-[deploy]
-startCommand = "python -m learning_scout.bot"
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 3
-watchPatterns = ["learning_scout/**", "pyproject.toml", "Procfile", "railway.toml"]

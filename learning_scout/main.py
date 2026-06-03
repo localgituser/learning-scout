@@ -8,19 +8,26 @@ from pathlib import Path
 
 from anthropic import AsyncAnthropic
 
+from learning_scout.cf_state_client import CFStateConfig, fetch_state, push_state
 from learning_scout.config_loader import load_config, ConfigValidationError
-from learning_scout.github_writer import GitHubWriterConfig, commit_seen_json
-from learning_scout.memory import load_seen, save_seen, filter_unseen, filter_blocked, mark_seen
+from learning_scout.memory import filter_unseen, filter_blocked, mark_seen
 from learning_scout.scout import run_search
 from learning_scout.scorer import build_digest
 from learning_scout.telegram_bot import send_digest
+
+
+def _cf_config() -> CFStateConfig:
+    return CFStateConfig(
+        worker_url=os.environ["CF_WORKER_URL"],
+        api_secret=os.environ["CF_API_SECRET"],
+    )
 
 
 async def _run(dry_run: bool = False) -> None:
     config = load_config(Path("config.yaml"))
 
     today = date.today()
-    seen, blocked = load_seen()
+    seen, blocked = await fetch_state(_cf_config())
     client = AsyncAnthropic(
         api_key=os.environ["ANTHROPIC_API_KEY"],
         default_headers={"anthropic-beta": "web-search-2025-03-05"},
@@ -50,15 +57,9 @@ async def _run(dry_run: bool = False) -> None:
         sys.exit(1)
 
     for item in digest.items:
-        seen = mark_seen(seen, item, "skipped", today)  # default to skipped; bot upgrades to saved
-    save_seen(seen, blocked)
-
-    gh = GitHubWriterConfig(
-        token=os.environ["GH_PAT"],
-        repo=os.environ.get("GITHUB_STATE_REPO") or os.environ["GITHUB_REPO"],
-    )
-    await commit_seen_json(seen, blocked, gh, message="chore: update seen.json after digest [skip ci]")
-    print(f"Sent {len(digest.items)} items and committed seen.json to GitHub.")
+        seen = mark_seen(seen, item, "skipped", today)  # default; Worker upgrades to saved
+    await push_state(seen, blocked, _cf_config())
+    print(f"Sent {len(digest.items)} items and pushed state to Cloudflare KV.")
 
 
 def main() -> None:

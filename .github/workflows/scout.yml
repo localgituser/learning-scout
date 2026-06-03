@@ -9,12 +9,10 @@ jobs:
   scout:
     runs-on: ubuntu-latest
     permissions:
-      contents: read         # state is written to a separate repo via GH_PAT
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-python@v5
         with:
@@ -37,7 +35,6 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          GH_PAT: ${{ secrets.GH_PAT }}
-          GITHUB_REPO: ${{ github.repository }}
-          GITHUB_STATE_REPO: ${{ secrets.STATE_REPO }}
+          CF_WORKER_URL: ${{ secrets.CF_WORKER_URL }}
+          CF_API_SECRET: ${{ secrets.CF_API_SECRET }}
         run: python -m learning_scout.main

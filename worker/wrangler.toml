@@ -1,0 +1,16 @@
+name = "learning-scout-bot"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+[[kv_namespaces]]
+binding = "STATE"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+# preview_id = "REPLACE_WITH_YOUR_KV_PREVIEW_ID"  # for wrangler dev
+
+[vars]
+# Secrets are set via: wrangler secret put TELEGRAM_BOT_TOKEN
+# Required secrets:
+#   TELEGRAM_BOT_TOKEN   — from @BotFather
+#   TELEGRAM_CHAT_ID     — your Telegram user ID
+#   API_SECRET           — shared secret for /state endpoint (generate with: openssl rand -hex 32)
+#   WEBHOOK_SECRET       — optional; set when registering the webhook to verify Telegram requests
