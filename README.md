@@ -155,14 +155,24 @@ In your forked repo: **Settings → Secrets and variables → Actions → New re
 
 ### 6. Test locally before the first live run
 
+Create a local `.env` file from the example:
+
+```bash
+cp .env.example .env
+```
+
+Fill in the values — `ANTHROPIC_API_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` are the same as the GitHub secrets you set above. `CF_WORKER_URL` is the Worker URL from step 4. `CF_API_SECRET` is the same value you set as `API_SECRET` in Wrangler.
+
+Then install and run:
+
 ```bash
 pip install -e ".[dev]"
-python -m learning_scout.main --dry-run
+set -a && source .env && python -m learning_scout.main --dry-run
 ```
 
 This runs the full pipeline (real Claude API call, real web searches) but prints results to the terminal instead of sending to Telegram. Good way to verify your profile produces sensible results before Monday.
 
-> **Local dry-run needs CF vars**: even in dry-run mode the script reads seen state from Cloudflare KV. Set `CF_WORKER_URL` and `CF_API_SECRET` as local environment variables, or export them in your shell before running.
+> **Note**: `.env` is gitignored and uses `export` on each line so `source .env` makes all variables available to the Python process.
 
 ### 7. Enable the GitHub Actions workflow
 
