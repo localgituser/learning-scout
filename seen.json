@@ -55,6 +55,48 @@
       "url": "https://hellopm.co/free/",
       "first_seen": "2026-06-02",
       "status": "skipped"
+    },
+    {
+      "id": "f1ea05502d63e7ff8e82bb8d4ddad109bf6ac6b6dc9b219a414f2e5fb527906d",
+      "title": "Data Engineering Melbourne Meetup",
+      "url": "https://www.meetup.com/data-engineering-melbourne/",
+      "first_seen": "2026-06-03",
+      "status": "skipped"
+    },
+    {
+      "id": "79d7ce9527b1aa2ddad4e031c9c5e23bd918c013dc5a01a2414134511a814024",
+      "title": "ProductCon Online \u2014 Free Livestream Tier",
+      "url": "https://productschool.com/productcon",
+      "first_seen": "2026-06-03",
+      "status": "skipped"
+    },
+    {
+      "id": "a0da670d2b7c71a0a2629e17a1a763ecc89dd672919bf2e8211a567442f2ed3b",
+      "title": "Gartner Product Management Free Webinar Series",
+      "url": "https://www.gartner.com/en/product-management/events/webinars",
+      "first_seen": "2026-06-03",
+      "status": "skipped"
+    },
+    {
+      "id": "9bebba40326b01b16909d628f98bbf2874b45a515bda39fc3ceb999945d2d18e",
+      "title": "HelloPM Free AI Product Management Course \u2014 9 Masterclasses on YouTube",
+      "url": "https://hellopm.co/free/",
+      "first_seen": "2026-06-03",
+      "status": "skipped"
+    },
+    {
+      "id": "1b20f85dbafe334eedb47b51f4159683090033e00ef3c7093d4fef6e3fe50230",
+      "title": "DataEngBytes 2026 \u2014 Melbourne Conference",
+      "url": "https://dataengbytes.com/",
+      "first_seen": "2026-06-03",
+      "status": "skipped"
+    },
+    {
+      "id": "89b5626d3dace1a03f33477cc93d8bfcd8c1d3728b46b0b9de8fd2c5a4f49e0d",
+      "title": "The Product Experience Podcast \u2014 Mind the Product",
+      "url": "https://www.mindtheproduct.com/",
+      "first_seen": "2026-06-03",
+      "status": "skipped"
     }
   ],
   "blocked_keywords": []
