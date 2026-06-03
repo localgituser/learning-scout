@@ -31,10 +31,14 @@ IMPORTANT — actionable dates: For every item, check whether any of the followi
 Only set deadline/deadline_type if the date is in the future relative to today's date. Do not surface expired deadlines.
 
 IMPORTANT — cost_aud field rules:
-- Free items (no cost at all): set cost_aud to 0 (not null)
+- Free items (no cost at all): set cost_aud to 0 (not null). Only set 0 when the item is EXPLICITLY advertised as free.
 - Items with a known cost: set cost_aud to the numeric AUD value
 - Items where cost is genuinely unknown (TBA, not published yet): set cost_aud to null
-- If the user's budget is AUD 0, ONLY return free items (cost_aud: 0). Do not return paid or unknown-cost items.
+- If the user's budget is AUD 0, ONLY return items you have VERIFIED are genuinely free. Do NOT set cost_aud to 0 to make a paid or unknown-cost item pass this filter. If pricing is TBA, not yet published, or you are unsure whether it is free, EXCLUDE the item entirely.
+
+IMPORTANT — url field rules:
+- The url must be an actual URL you found via web search. Do NOT construct or guess URLs.
+- If you cannot find a verified direct URL for an item, exclude it.
 
 Return ONLY a JSON array (no markdown, no preamble) of objects with these fields:
 - title (string, required)
