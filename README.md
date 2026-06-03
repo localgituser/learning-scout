@@ -99,6 +99,8 @@ npm install
 cp wrangler.toml.example wrangler.toml
 ```
 
+`wrangler.toml` is gitignored — your namespace ID stays local and is never committed.
+
 **Create a KV namespace:**
 
 ```bash
@@ -110,7 +112,7 @@ Copy the `id` from the output and paste it into `worker/wrangler.toml`:
 ```toml
 [[kv_namespaces]]
 binding = "STATE"
-id = "paste-your-id-here"
+id = "paste-your-namespace-id-here"
 ```
 
 **Set Worker secrets** (you'll be prompted to enter each value):
