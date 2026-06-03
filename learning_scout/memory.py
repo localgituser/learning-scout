@@ -5,6 +5,7 @@ import tempfile
 from datetime import date
 from pathlib import Path
 from learning_scout.models import LearningItem, SeenItem, ItemStatus
+from learning_scout.state_serde import deserialize_state, serialize_state
 
 # SEEN_FILE env var allows each deployment context (Actions, Railway, local)
 # to set an explicit absolute path; otherwise fall back to cwd/seen.json.
@@ -24,25 +25,15 @@ def load_seen(path: Path = SEEN_PATH) -> tuple[dict[str, SeenItem], list[str]]:
         data = json.loads(path.read_text())
     except (json.JSONDecodeError, OSError):
         return {}, []
-
-    items: dict[str, SeenItem] = {}
-    for raw in data.get("items", []):
-        item = SeenItem.model_validate(raw)
-        items[item.id] = item
-
-    blocked: list[str] = [kw.lower() for kw in data.get("blocked_keywords", [])]
-    return items, blocked
+    return deserialize_state(data)
 
 
 def save_seen(seen: dict[str, SeenItem], blocked: list[str], path: Path = SEEN_PATH) -> None:
-    payload = {
-        "items": [item.model_dump(mode="json") for item in seen.values()],
-        "blocked_keywords": blocked,
-    }
+    payload = json.dumps(serialize_state(seen, blocked), indent=2, default=str)
     # Atomic write: unique tmp in same directory, then rename to avoid partial writes
     fd, tmp_str = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
     try:
-        os.write(fd, json.dumps(payload, indent=2, default=str).encode())
+        os.write(fd, payload.encode())
         os.close(fd)
         Path(tmp_str).replace(path)
     except Exception:
@@ -79,9 +70,11 @@ def filter_unseen(items: list[LearningItem], seen: dict[str, SeenItem]) -> list[
 def filter_blocked(items: list[LearningItem], blocked: list[str]) -> list[LearningItem]:
     if not blocked:
         return items
+    import re
+    patterns = [re.compile(rf"\b{re.escape(kw)}\b", re.IGNORECASE) for kw in blocked]
     return [
         i for i in items
-        if not any(kw in i.title.lower() or kw in i.description.lower() for kw in blocked)
+        if not any(p.search(i.title) or p.search(i.description) for p in patterns)
     ]
 
 

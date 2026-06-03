@@ -2,11 +2,11 @@
 from __future__ import annotations
 import json
 from dataclasses import dataclass
-from datetime import date
 
 import httpx
 
 from learning_scout.models import SeenItem
+from learning_scout.state_serde import deserialize_state, serialize_state
 
 
 @dataclass
@@ -20,21 +20,11 @@ class CFStateError(Exception):
 
 
 def _serialize(seen: dict[str, SeenItem], blocked: list[str]) -> str:
-    payload = {
-        "items": [item.model_dump(mode="json") for item in seen.values()],
-        "blocked_keywords": blocked,
-    }
-    return json.dumps(payload, default=str)
+    return json.dumps(serialize_state(seen, blocked), default=str)
 
 
 def _deserialize(raw: str) -> tuple[dict[str, SeenItem], list[str]]:
-    data = json.loads(raw)
-    items: dict[str, SeenItem] = {}
-    for entry in data.get("items", []):
-        item = SeenItem.model_validate(entry)
-        items[item.id] = item
-    blocked: list[str] = [kw.lower() for kw in data.get("blocked_keywords", [])]
-    return items, blocked
+    return deserialize_state(json.loads(raw))
 
 
 async def fetch_state(config: CFStateConfig) -> tuple[dict[str, SeenItem], list[str]]:

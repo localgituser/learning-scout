@@ -8,9 +8,9 @@ def compute_timeliness_modifier(item: LearningItem, as_of: date | None = None) -
 
     if item.deadline is not None:
         days = (item.deadline - today).days
-        if days <= 14:
+        if 0 <= days <= 14:
             return 2.0
-        if days <= 30:
+        if 0 <= days <= 30:
             return 1.0
 
     if item.event_date is not None:

@@ -6,6 +6,9 @@ import sys
 from datetime import date
 from pathlib import Path
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from anthropic import AsyncAnthropic
 
 from learning_scout.cf_state_client import CFStateConfig, fetch_state, push_state
@@ -58,7 +61,19 @@ async def _run(dry_run: bool = False) -> None:
 
     for item in digest.items:
         seen = mark_seen(seen, item, "skipped", today)  # default; Worker upgrades to saved
-    await push_state(seen, blocked, _cf_config())
+
+    # Re-fetch before writing to merge any user interactions (saves, blocks) that
+    # occurred during the 2-3 minute search window.
+    fresh_seen, fresh_blocked = await fetch_state(_cf_config())
+    for item_id, item in seen.items():
+        if item_id not in fresh_seen:
+            fresh_seen[item_id] = item
+    merged_blocked = list(fresh_blocked)
+    for kw in blocked:
+        if kw not in merged_blocked:
+            merged_blocked.append(kw)
+
+    await push_state(fresh_seen, merged_blocked, _cf_config())
     print(f"Sent {len(digest.items)} items and pushed state to Cloudflare KV.")
 
 

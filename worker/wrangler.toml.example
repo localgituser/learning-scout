@@ -13,4 +13,4 @@ id = "paste-your-namespace-id-here"
 #   TELEGRAM_BOT_TOKEN   — from @BotFather
 #   TELEGRAM_CHAT_ID     — your Telegram user ID
 #   API_SECRET           — shared secret for /state endpoint (generate with: openssl rand -hex 32)
-#   WEBHOOK_SECRET       — optional; set when registering the webhook to verify Telegram requests
+#   WEBHOOK_SECRET       — secret token passed by Telegram on every webhook call (required)

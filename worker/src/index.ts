@@ -93,11 +93,15 @@ async function callTelegram(
   method: string,
   body: Record<string, unknown>
 ): Promise<void> {
-  await fetch(`https://api.telegram.org/bot${token}/${method}`, {
+  const res = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    console.error(`Telegram ${method} failed ${res.status}: ${text}`);
+  }
 }
 
 // ── Auth ─────────────────────────────────────────────────────────────────────
@@ -190,7 +194,8 @@ async function handleMessage(message: TelegramMessage, env: Env): Promise<void> 
         text: "No saved items yet.",
       });
     } else {
-      const lines = saved.map((item) => `• <a href="${item.url}">${escapeHtml(item.title)}</a>`).join("\n");
+      const display = saved.slice(0, 20);
+      const lines = display.map((item) => `• <a href="${escapeAttr(item.url)}">${escapeHtml(item.title)}</a>`).join("\n");
       await callTelegram(env.TELEGRAM_BOT_TOKEN, "sendMessage", {
         chat_id: chatId,
         text: `<b>Saved items (${saved.length})</b>\n\n${lines}`,
@@ -253,6 +258,11 @@ function escapeHtml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+function escapeAttr(value: string): string {
+  const safe = /^https?:\/\//i.test(value) ? value : "#";
+  return safe.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+}
+
 // ── Main fetch handler ──────────────────────────────────────────────────────
 
 export default {
@@ -275,6 +285,9 @@ export default {
 
       if (request.method === "PUT") {
         const body = (await request.json()) as State;
+        if (!Array.isArray(body?.items) || !Array.isArray(body?.blocked_keywords)) {
+          return new Response("Bad Request", { status: 400 });
+        }
         await putState(env, body);
         return new Response("OK");
       }
@@ -284,11 +297,13 @@ export default {
 
     // Telegram webhook
     if (url.pathname === "/webhook" && request.method === "POST") {
-      if (env.WEBHOOK_SECRET) {
-        const telegramToken = request.headers.get("X-Telegram-Bot-Api-Secret-Token");
-        if (telegramToken !== env.WEBHOOK_SECRET) {
-          return new Response("Unauthorized", { status: 401 });
-        }
+      if (!env.WEBHOOK_SECRET) {
+        console.error("WEBHOOK_SECRET is not configured");
+        return new Response("Service misconfigured", { status: 500 });
+      }
+      const telegramToken = request.headers.get("X-Telegram-Bot-Api-Secret-Token");
+      if (telegramToken !== env.WEBHOOK_SECRET) {
+        return new Response("Unauthorized", { status: 401 });
       }
 
       const update = (await request.json()) as TelegramUpdate;

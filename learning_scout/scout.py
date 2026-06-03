@@ -158,7 +158,9 @@ async def run_search(
     as_of: "date | None" = None,
 ) -> list[LearningItem]:
     if client is None:
-        client = AsyncAnthropic()
+        client = AsyncAnthropic(
+            default_headers={"anthropic-beta": "web-search-2025-03-05"},
+        )
 
     topics = config.profile.topics_of_interest[: config.search.topics_per_run]
     concurrency = config.search.max_concurrent_searches

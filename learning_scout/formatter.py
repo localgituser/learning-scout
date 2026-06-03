@@ -55,7 +55,7 @@ def format_item_html(item: LearningItem, index: int) -> str:
     emoji = category_emoji(item.category)
     title = html.escape(item.title)
     description = html.escape(item.description)
-    url = _safe_url(item.url)
+    url = html.escape(_safe_url(item.url))
     lines = [
         f"{emoji} <b>{title}</b>",
         description,
@@ -80,7 +80,7 @@ def format_saved_list(items: list[SeenItem]) -> str:
         return "You have no saved items yet. Tap 💾 Save on any digest item to save it."
     lines = ["<b>💾 Your saved items:</b>", ""]
     for i, item in enumerate(saved[-20:], 1):  # cap at 20 to stay under Telegram's 4096-char limit
-        url = _safe_url(item.url)
+        url = html.escape(_safe_url(item.url))
         title = html.escape(item.title)
         lines.append(f'{i}. <a href="{url}">{title}</a> ({item.first_seen})')
     return "\n".join(lines)
