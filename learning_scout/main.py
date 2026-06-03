@@ -54,7 +54,7 @@ async def _run(dry_run: bool = False) -> None:
     save_seen(seen, blocked)
 
     gh = GitHubWriterConfig(
-        token=os.environ["GITHUB_TOKEN"],
+        token=os.environ["GH_PAT"],
         repo=os.environ.get("GITHUB_STATE_REPO") or os.environ["GITHUB_REPO"],
     )
     await commit_seen_json(seen, blocked, gh, message="chore: update seen.json after digest [skip ci]")
