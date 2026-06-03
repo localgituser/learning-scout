@@ -35,15 +35,22 @@ def test_compute_hash_is_deterministic(item):
     assert h1 == h2
 
 
-def test_compute_hash_differs_for_different_inputs(item):
+def test_compute_hash_differs_for_different_urls(item):
     h1 = compute_hash(item.title, item.url)
     h2 = compute_hash(item.title, "https://other.com")
     assert h1 != h2
 
 
-def test_compute_hash_normalises_case(item):
-    h1 = compute_hash("Reforge: Product Strategy", item.url)
-    h2 = compute_hash("reforge: product strategy", item.url)
+def test_compute_hash_same_url_different_title_gives_same_hash(item):
+    # Title varies across LLM runs; URL is the canonical identity
+    h1 = compute_hash("HelloPM – Free AI Product Management Course", item.url)
+    h2 = compute_hash("HelloPM Free AI Product Management Course", item.url)
+    assert h1 == h2
+
+
+def test_compute_hash_normalises_url_case(item):
+    h1 = compute_hash(item.title, item.url.upper())
+    h2 = compute_hash(item.title, item.url.lower())
     assert h1 == h2
 
 

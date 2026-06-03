@@ -6,7 +6,8 @@ from pydantic import BaseModel, Field, field_validator
 
 
 def _hash_key(title: str, url: str) -> str:
-    key = f"{title.lower().strip()}|{url.lower().strip()}"
+    # URL is the canonical identity; title varies across LLM runs for the same resource
+    key = url.lower().strip()
     return hashlib.sha256(key.encode()).hexdigest()
 
 
