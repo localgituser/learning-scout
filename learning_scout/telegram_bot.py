@@ -104,6 +104,7 @@ async def _handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     seen, blocked = load_seen()
     # Find matching item by exact-length prefix — require unique match to prevent mis-targeting
     candidates = [item for h, item in seen.items() if h.startswith(parsed.item_hash)]
+    print(f"[callback] action={parsed.action} hash_prefix={parsed.item_hash} local_seen_count={len(seen)} candidates={len(candidates)}", flush=True)
     if not candidates:
         # seen.json may be stale (digest ran after bot last started) — re-hydrate from GitHub
         try:
@@ -113,6 +114,9 @@ async def _handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 SEEN_PATH.write_text(raw)
                 seen, blocked = load_seen()
                 candidates = [item for h, item in seen.items() if h.startswith(parsed.item_hash)]
+                print(f"[callback] after re-hydrate: gh_seen_count={len(seen)} candidates={len(candidates)}", flush=True)
+                if not candidates:
+                    print(f"[callback] known hashes (first 16): {[h[:16] for h in seen.keys()]}", flush=True)
         except Exception as exc:
             print(f"[callback] re-hydrate from GitHub failed: {exc}", flush=True)
     if len(candidates) != 1:
