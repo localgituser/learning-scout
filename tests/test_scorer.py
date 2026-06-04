@@ -53,6 +53,18 @@ def test_no_modifier_for_distant_deadline():
 
 
 @freeze_time("2026-06-02")
+def test_event_within_30_days_gets_boost():
+    item = make_item(event_date=date(2026, 6, 20))
+    assert compute_timeliness_modifier(item) == 1.5
+
+
+@freeze_time("2026-06-02")
+def test_event_within_90_days_gets_small_boost():
+    item = make_item(event_date=date(2026, 8, 1))
+    assert compute_timeliness_modifier(item) == 0.5
+
+
+@freeze_time("2026-06-02")
 def test_negative_modifier_for_far_future_event():
     item = make_item(event_date=date(2027, 9, 1))
     assert compute_timeliness_modifier(item) == -1.0

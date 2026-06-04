@@ -13,7 +13,7 @@ def _hash_key(title: str, url: str) -> str:
 
 CareerStage = Literal["early", "mid", "mid-senior", "senior", "exec"]
 ItemStatus = Literal["saved", "skipped", "blocked"]
-ItemCategory = Literal["in_person_events", "online_events", "meetups", "courses"]
+ItemCategory = Literal["in_person_events", "online_events", "webinars", "meetups", "courses"]
 DeadlineType = Literal["early_bird", "cfp", "scholarship", "enrolment", "certification", "mentorship", "registration"]
 
 
@@ -37,6 +37,7 @@ class SearchConfig(BaseModel):
 class CategorySlots(BaseModel):
     in_person_events: int = 1
     online_events: int = 1
+    webinars: int = 1
     meetups: int = 1
     courses: int = 3
 

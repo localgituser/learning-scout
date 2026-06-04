@@ -84,7 +84,7 @@ def test_format_saved_list_with_items():
 def test_category_emoji_covers_all_categories():
     from learning_scout.models import ItemCategory
     categories: list[ItemCategory] = [
-        "in_person_events", "online_events", "meetups", "courses",
+        "in_person_events", "online_events", "webinars", "meetups", "courses",
     ]
     for cat in categories:
         emoji = category_emoji(cat)

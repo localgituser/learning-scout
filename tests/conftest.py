@@ -32,6 +32,7 @@ def sample_config(tmp_path) -> AppConfig:
             categories=CategorySlots(
                 in_person_events=1,
                 online_events=1,
+                webinars=1,
                 meetups=1,
                 courses=2,
             ),

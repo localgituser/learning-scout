@@ -7,6 +7,7 @@ from learning_scout.models import ItemCategory, LearningItem, SeenItem
 _CATEGORY_EMOJI: dict[str, str] = {
     "in_person_events": "🎯",
     "online_events": "🖥️",
+    "webinars": "📡",
     "meetups": "👥",
     "courses": "📚",
 }

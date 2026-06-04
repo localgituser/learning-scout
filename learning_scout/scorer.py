@@ -15,6 +15,10 @@ def compute_timeliness_modifier(item: LearningItem, as_of: date | None = None) -
 
     if item.event_date is not None:
         days_to_event = (item.event_date - today).days
+        if 7 <= days_to_event <= 30:
+            return 1.5
+        if 31 <= days_to_event <= 90:
+            return 0.5
         if days_to_event > 365:
             return -1.0
 
